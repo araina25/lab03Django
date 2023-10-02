@@ -4,7 +4,18 @@ from django.urls import reverse
 from django.views import generic
 
 from .models import Choice, Question
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .serializers import QuestionSerializer
 
+@api_view(['GET'])
+def get_questions(request):
+    """
+    Get the list of questions on our website
+    """
+    questions = Question.objects.all()
+    serializer = QuestionSerializer(questions, many=True)
+    return Response(serializer.data)
 
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
